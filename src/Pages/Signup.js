@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
+import SignupPopup from '../Components/SignupPopup';
 
-const Signup = () => {
+const Signup = (props) => {
 
     const [hospitalName, setHospitalName] = useState('');
     const [hNameIsActive,setHNameIsActive] = useState(false);
@@ -44,6 +45,8 @@ const Signup = () => {
     const [isAmbActive, setIsAmbActive] = useState(false);
 
     const [isSignUpClicked, setIsSignUpClicked] = useState(false);
+
+    const [signUpSuccessPopup, setSignUpSuccessPopup] = useState(false);
 
     const [formData, setFormData] = useState({
         hospital_name: '',
@@ -108,7 +111,12 @@ const Signup = () => {
 
         console.log('Isvalid: ',validationCheck());
         if(validationCheck()){
-            console.log(formData)
+            console.log(formData);
+            setSignUpSuccessPopup(true);
+            setTimeout(()=>{
+                setSignUpSuccessPopup(false);
+                props.onFormSwitch('login');
+            },3000)
         }else{
             console.log('Invalid')
         }
@@ -131,7 +139,7 @@ const Signup = () => {
             </div>
 
             <div className="email-container">
-                <input type="text" placeholder='Email ID' className={isEmailActive?'focused':'notFocused'} onFocus={(e)=>setIsEmailActive(true)} onBlur={(e)=>setIsEmailActive(false)} onChange={(e)=>setEmailID(e.target.value)} />
+                <input type="email" placeholder='Email ID' className={isEmailActive?'focused':'notFocused'} onFocus={(e)=>setIsEmailActive(true)} onBlur={(e)=>setIsEmailActive(false)} onChange={(e)=>setEmailID(e.target.value)} />
                 {isSignUpClicked && emailID.length===0 && <div className="error-message">Email ID is required</div>}
                 {isSignUpClicked && emailID.length>0 && !email_regex.test(emailID) && <div className="error-message">Invalid Email pattern</div>}
             </div>
@@ -192,12 +200,12 @@ const Signup = () => {
 
                 <span className="reg-date">Hospital Registration Date - </span>
                 <br />
-                <input type="datetime-local" placeholder='Hospital Registration Date' onChange={(e)=>setRegistrationDate(e.target.value)} />
+                <input type="date" placeholder='Hospital Registration Date' onChange={(e)=>setRegistrationDate(e.target.value)} />
                 {isSignUpClicked && registrationDate.length===0 && <div className="error-message-reg">Registration date is required</div>}
             </div>
 
             <div className="password-container">
-                <input type="text" placeholder='Create Password' className={isPasswordActive?'focused':'notFocused'} onFocus={(e)=>setIsPasswordActive(true)} onBlur={(e)=>setIsPasswordActive(false)} onChange={(e)=>setPassword(e.target.value)} />
+                <input type="password" placeholder='Create Password' className={isPasswordActive?'focused':'notFocused'} onFocus={(e)=>setIsPasswordActive(true)} onBlur={(e)=>setIsPasswordActive(false)} onChange={(e)=>setPassword(e.target.value)} />
                 {isSignUpClicked && password.length===0 && <div className="error-message">Password is required</div>}
                 {isSignUpClicked && password.length>0 && (password.length<8 || password.length>25) && <div className="error-message">Password must be atleast 8 characters long and not greater than 25 characters</div>}
             </div>
@@ -210,7 +218,7 @@ const Signup = () => {
             </div>
 
             <div className="confirm-password-container">
-                <input type="text" placeholder='Confirm Password' className={isConfirmPasswordActive?'focused':'notFocused'} onFocus={(e)=>setIsConfirmPasswordActive(true)} onBlur={(e)=>setIsConfirmPasswordActive(false)} onChange={(e)=>setConfirmPassword(e.target.value)} />
+                <input type="password" placeholder='Confirm Password' className={isConfirmPasswordActive?'focused':'notFocused'} onFocus={(e)=>setIsConfirmPasswordActive(true)} onBlur={(e)=>setIsConfirmPasswordActive(false)} onChange={(e)=>setConfirmPassword(e.target.value)} />
                 {isSignUpClicked && confirmPassword.length===0 && <div className="error-message">Confirm your password</div>}
                 {isSignUpClicked && confirmPassword.length>0 && confirmPassword !== password && <div className="error-message">Password does not match</div>}
             </div>
@@ -219,6 +227,10 @@ const Signup = () => {
                 <button className='signupButt' type='submit'>Signup</button>
             </div>
         </form>
+        <SignupPopup trigger={signUpSuccessPopup} setTrigger={setSignUpSuccessPopup}>
+            <div className="checkmark"></div>
+            <h3 className='registration-success'>Your registration has been successfull</h3>
+        </SignupPopup>
     </div>
   )
 }

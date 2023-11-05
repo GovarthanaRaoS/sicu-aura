@@ -12,19 +12,23 @@ const HomeLayout = () => {
 
     const toggleForm = (formName) =>{
         setCurrentForm(formName);
+        if(formName==='signup'){
+            setIsSignUpActive(true);
+            setIsLoginUpActive(false);
+        }else{
+            setIsSignUpActive(false);
+            setIsLoginUpActive(true);
+        }
 
     }
 
     const handleLoginFormClick = () =>{
         toggleForm('login');
-        setIsSignUpActive(false);
-        setIsLoginUpActive(true);
     }
 
     const handleSignupFormClick = () =>{
         toggleForm('signup');
-        setIsSignUpActive(true);
-        setIsLoginUpActive(false);
+
     }
 
   return (
@@ -38,13 +42,13 @@ const HomeLayout = () => {
             <div className="header-container">
                 <div className="sicu-hospital-logo"></div>
                 <div className="sign-log-text-container">
-                <span className={isSignUpActive?'isActive':'notActive'} onClick={handleSignupFormClick}>Sign up</span>/<span className={isLoginUpActive?'isActive':'notActive'} onClick={handleLoginFormClick}>Login</span>
+                <span className={isSignUpActive?'isActive':'notActive'} onClick={handleSignupFormClick}>Sign-up </span>/ <span className={isLoginUpActive?'isActive':'notActive'} onClick={handleLoginFormClick}>Login</span>
                 </div>
             </div>
             <div className="sign-login-container">
-                {currentForm === 'signup' ? <Signup onFormSwitch={toggleForm}/> : <Login onFormSwitch={toggleForm}/>}
+                {currentForm === 'signup' ? <Signup onFormSwitch={toggleForm} setSignupActiveOrInactive={setIsSignUpActive}/> : <Login onFormSwitch={toggleForm} setLoginActiveOrInactive={setIsLoginUpActive}/>}
             </div>
-            <footer><p>Terms & Conditions</p></footer>
+            <footer><p>* Terms & Conditions | Privacy policy</p></footer>
         </div>
     </div>
   )
